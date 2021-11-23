@@ -1,6 +1,8 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import VitePages from 'vite-plugin-pages';
+import ViteMarkdown from 'vite-plugin-md';
+import ViteComponents from 'unplugin-vue-components/vite';
 import { resolve } from 'path';
 import fs from 'fs-extra';
 import matter from 'gray-matter';
@@ -13,7 +15,7 @@ export default defineConfig({
     }),
     VitePages({
       extensions: ['vue', 'md'],
-      pagesDir: 'pages',
+      // pagesDir: 'pages',
       extendRoute(route) {
         const path = resolve(__dirname, route.component.slice(1));
         const md = fs.readFileSync(path, 'utf-8');
@@ -22,6 +24,11 @@ export default defineConfig({
 
         return route;
       },
+    }),
+    ViteMarkdown(),
+    ViteComponents({
+      extensions: ['vue', 'md'],
+      include: [/\.md$/],
     }),
   ],
 });
